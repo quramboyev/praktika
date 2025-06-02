@@ -1,0 +1,263 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<style>
+  .container {
+    background-color: #1e293b;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    max-width: 1000px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+  }
+
+  .movie-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .movie-details-1 {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    font-size: 28px;
+    cursor: pointer;
+    margin-right: 16px;
+    padding-left: 10px;
+    user-select: none;
+    line-height: 1;
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 24px;
+    margin: 0;
+    flex-grow: 1;
+    text-align: center;
+    color: white;
+  }
+
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid #334155;
+    margin-bottom: 8px;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: black;
+    border-bottom: 2px solid transparent;
+  }
+
+  .tab.active {
+    border-bottom: 2px solid blue;
+    font-weight: bold;
+  }
+
+  iframe {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    height: 315px;
+    border: none;
+  }
+
+  .ratings {
+    display: flex;
+    border-top: 1px solid #334155;
+    border-bottom: 1px solid #334155;
+    margin: 16px 0;
+  }
+
+  .rating {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    border-right: 1px solid #334155;
+  }
+
+  .rating:last-child {
+    border-right: none;
+  }
+
+  .score {
+    font-weight: 700;
+    font-size: 24px;
+    color: white;
+  }
+
+  .source {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 4px;
+  }
+
+  .description {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    color: #cbd5e1;
+  }
+
+  .info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    overflow-y: auto;
+    color: #cbd5e1;
+  }
+
+  .info-list li {
+    margin-bottom: 8px;
+  }
+
+  .label {
+    color: #64748b;
+    margin-right: 6px;
+    user-select: none;
+    font-weight: 600;
+  }
+
+  .certificate {
+    background-color: #475569;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-weight: 700;
+    font-size: 12px;
+    color: white;
+  }
+
+  .value {
+    font-weight: 700;
+    color: white;
+  }
+
+  .select-session-btn {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #ff8036;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .select-session-btn:hover {
+    opacity: 0.8;
+  }
+</style>
+
+<div class="container">
+  <div class="movie-details">
+    <div class="movie-details-1">
+      <header class="header">
+        <a class="back-btn" href="{% url 'home' %}">
+          <i class="bi bi-box-arrow-in-left"></i
+        ></a>
+        <h1 class="title">The Batman</h1>
+      </header>
+
+      <div class="tabs">
+        <a
+          href="{% url 'movie_about' %}"
+          class="tab {% if request.path == '/movie_about/' %}active{% endif %}"
+          >About</a
+        >
+        <a
+          href="{% url 'movie_sessions' %}"
+          class="tab {% if request.path == '/movie_sessions' %}active{% endif %}"
+          >Sessions</a
+        >
+      </div>
+
+      <iframe
+        width="100%"
+        height="315"
+        src="https://www.youtube.com/embed/mqqft2x_Aa4?si=vFj-cMNtvunnM_gu"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
+      <div class="ratings">
+        <div class="rating">
+          <div class="score">8.3</div>
+          <div class="source">IMDB</div>
+        </div>
+        <div class="rating">
+          <div class="score">7.9</div>
+          <div class="source">Kinopoisk</div>
+        </div>
+      </div>
+
+      <p class="description">
+        When the Riddler, a sadistic serial killer, begins murdering key
+        political figures in Gotham, Batman is forced to investigate the city's
+        hidden corruption and question his family's involvement.
+      </p>
+
+      <ul class="info-list">
+        <li>
+          <span class="label">Certificate</span>
+          <span class="certificate">16+</span>
+        </li>
+        <li>
+          <span class="label">Runtime</span> <span class="value">02:56</span>
+        </li>
+        <li>
+          <span class="label">Release</span> <span class="value">2022</span>
+        </li>
+        <li>
+          <span class="label">Genre</span>
+          <span class="value">Action, Crime, Drama</span>
+        </li>
+        <li>
+          <span class="label">Director</span>
+          <span class="value">Matt Reeves</span>
+        </li>
+        <li>
+          <span class="label">Cast</span>
+          <span class="value"
+            >Robert Pattinson, Zoë Kravitz, Jeffrey Wright, Colin Farrell, Paul
+            Dano, John Turturro, Andy Serkis, Peter Sarsgaard</span
+          >
+        </li>
+      </ul>
+      <button class="select-session-btn">Выбрать сеанс</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll(".tab");
+  const contents = document.querySelectorAll(".tab-content");
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      // Убираем активный класс у всех табов
+      tabs.forEach((t) => t.classList.remove("active"));
+      // Скрываем все контенты
+      contents.forEach((c) => (c.style.display = "none"));
+
+      // Добавляем активный класс к нажатому табу
+      tab.classList.add("active");
+      // Показываем связанный контент
+      const tabId = tab.getAttribute("data-tab");
+      document.getElementById(tabId).style.display = "block";
+    });
+  });
+</script>
+
+{% endblock %}
