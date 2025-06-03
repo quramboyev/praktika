@@ -1,0 +1,222 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+
+<style>
+  .container {
+    background-color: #1e293b;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    max-width: 1000px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+  }
+  h3,
+  .screen {
+    color: #fff;
+    user-select: none;
+  }
+  .screen {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    font-size: 1.2rem;
+  }
+  .seets {
+    width: 100%;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    background-color: #223344;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+  .seat {
+    width: 44px;
+    height: 44px;
+    margin: 5px;
+    border-radius: 6px;
+    background-color: #2e2e2e;
+    border: 2px solid #444;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.25s, border-color 0.25s, color 0.25s;
+    box-shadow: none;
+  }
+  .seat.available:hover {
+    background-color: #444;
+    border-color: #ff6f00;
+    color: #ffb347;
+    box-shadow: 0 0 8px #ff6f00aa;
+  }
+  .seat.occupied {
+    background-color: #3a3a3a;
+    border-color: #555;
+    cursor: not-allowed;
+    color: #777;
+    box-shadow: none;
+  }
+  .seat.chosen {
+    background-color: #ff6f00;
+    border-color: #ff6f00;
+    color: #fff;
+    box-shadow: 0 0 10px #ff6f00cc;
+  }
+  .row-seats {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .row-seats > div {
+    width: 36px;
+    height: 36px;
+    background-color: #444;
+    border-radius: 6px;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+  }
+  .row-seats > div.selected {
+    background-color: orange;
+    color: #fff;
+  }
+  #buySection {
+    margin-top: 30px;
+    text-align: center;
+  }
+  #buyBtn {
+    background-color: #ff6f00;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.25rem;
+    padding: 12px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px #ff6f00bb;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    user-select: none;
+    margin-bottom: 20px;
+  }
+  #buyBtn:hover:not(:disabled) {
+    background-color: #e65c00;
+    box-shadow: 0 6px 18px #e65c00cc;
+  }
+  #buyBtn:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    box-shadow: none;
+    color: #aaa;
+  }
+  #seats-container {
+    border: 1px solid red;
+    min-height: 300px;
+  }
+</style>
+
+<div class="container">
+  <h3 class="text-center mb-3">Eurasia Cinema7 — The Batman</h3>
+
+  <div class="screen">SCREEN</div>
+  <div class="seets" id="seatsContainer"></div>
+  <div id="buySection" class="d-none">
+    <button id="buyBtn" class="" type="button">
+      Купить билеты — <span id="totalPrice">0</span> ₽
+    </button>
+  </div>
+</div>
+
+<script>
+  const seatsContainer = document.getElementById("seatsContainer");
+  const selectedSeats = [];
+  const ticketPrice = 500;
+
+  const seatMap = [
+    [true, true, true, true, true, true, true, true],
+    [false, false, false, true, true, true, true, true],
+    [false, false, false, true, true, true, true, true],
+    [false, false, false, true, true, true, true, true],
+    [false, false, false, true, true, true, false, false],
+    [false, false, false, true, true, true, true, true],
+    [false, false, false, true, true, true, true, true],
+    [false, false, false, true, true, true, true, true],
+    [false, false, false, true, true, true, true, true],
+    [false, false, false, true, true, true, true, true],
+  ];
+
+  function renderSeats() {
+    seatsContainer.innerHTML = "";
+    for (let row = 0; row < seatMap.length; row++) {
+      const rowDiv = document.createElement("div");
+      rowDiv.classList.add("row-seats");
+
+      for (let seatNum = 0; seatNum < seatMap[row].length; seatNum++) {
+        const isOccupied = seatMap[row][seatNum];
+        const seatBtn = document.createElement("div");
+        seatBtn.classList.add("seat");
+        seatBtn.textContent = seatNum + 1;
+
+        // Первый ряд все места заняты и неактивны
+        if (row === 0) {
+          seatBtn.classList.add("occupied");
+        } else if (isOccupied) {
+          seatBtn.classList.add("occupied");
+        } else {
+          seatBtn.classList.add("available");
+          seatBtn.addEventListener("click", () =>
+            toggleSeat(row, seatNum, seatBtn)
+          );
+        }
+
+        rowDiv.appendChild(seatBtn);
+      }
+
+      seatsContainer.appendChild(rowDiv);
+    }
+  }
+
+  function toggleSeat(row, seatNum, seatBtn) {
+  const seatId = `${row}-${seatNum}`;
+  const index = selectedSeats.indexOf(seatId);
+
+  if (index === -1) {
+    selectedSeats.push(seatId);
+    seatBtn.classList.add("selected");
+  } else {
+    selectedSeats.splice(index, 1);
+    seatBtn.classList.remove("selected");
+  }
+
+  updateBuySection();
+  console.log("Selected seats:", selectedSeats);
+}
+
+  function updateBuySection() {
+    const buySection = document.getElementById("buySection");
+    const totalPriceSpan = document.getElementById("totalPrice");
+
+    if (selectedSeats.length > 0) {
+      buySection.classList.remove("d-none");
+      totalPriceSpan.textContent = selectedSeats.length * ticketPrice;
+    } else {
+      buySection.classList.add("d-none");
+      totalPriceSpan.textContent = 0;
+    }
+  }
+  renderSeats();
+</script>
+{% endblock %}

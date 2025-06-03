@@ -1,6 +1,9 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
 <style>
-  .container {
+    .container {
     background-color: #1e293b;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -9,13 +12,7 @@
     box-sizing: border-box;
     margin-top: 20px;
   }
-
   .movie-details {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .movie-details-1 {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -24,7 +21,6 @@
     display: flex;
     align-items: center;
   }
-
   .back-btn {
     background: none;
     border: none;
@@ -36,7 +32,6 @@
     user-select: none;
     line-height: 1;
   }
-
   .title {
     font-weight: 700;
     font-size: 24px;
@@ -45,25 +40,21 @@
     text-align: center;
     color: white;
   }
-
   .tabs {
     display: flex;
     border-bottom: 2px solid #334155;
     margin-bottom: 8px;
   }
-
   .tab {
     padding: 10px 20px;
     text-decoration: none;
-    color: black;
+    color: white;
     border-bottom: 2px solid transparent;
   }
-
   .tab.active {
-    border-bottom: 2px solid blue;
+    border-bottom: 2px solid #ff8036;
     font-weight: bold;
   }
-
   iframe {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -71,44 +62,37 @@
     height: 315px;
     border: none;
   }
-
   .ratings {
     display: flex;
     border-top: 1px solid #334155;
     border-bottom: 1px solid #334155;
     margin: 16px 0;
   }
-
   .rating {
     flex: 1;
     text-align: center;
     padding: 12px 0;
     border-right: 1px solid #334155;
   }
-
   .rating:last-child {
     border-right: none;
   }
-
   .score {
     font-weight: 700;
     font-size: 24px;
     color: white;
   }
-
   .source {
     font-size: 12px;
     color: #64748b;
     margin-top: 4px;
   }
-
   .description {
     font-size: 14px;
     line-height: 1.5;
     margin-bottom: 16px;
     color: #cbd5e1;
   }
-
   .info-list {
     list-style: none;
     padding: 0;
@@ -117,18 +101,15 @@
     overflow-y: auto;
     color: #cbd5e1;
   }
-
   .info-list li {
     margin-bottom: 8px;
   }
-
   .label {
     color: #64748b;
     margin-right: 6px;
     user-select: none;
     font-weight: 600;
   }
-
   .certificate {
     background-color: #475569;
     border-radius: 4px;
@@ -137,12 +118,10 @@
     font-size: 12px;
     color: white;
   }
-
   .value {
     font-weight: 700;
     color: white;
   }
-
   .select-session-btn {
     margin-bottom: 20px;
     padding: 10px 20px;
@@ -153,15 +132,13 @@
     cursor: pointer;
     transition: background-color 0.3s;
   }
-
   .select-session-btn:hover {
     opacity: 0.8;
   }
 </style>
 
 <div class="container">
-  <div class="movie-details">
-    <div class="movie-details-1">
+    <div class="movie-details">
       <header class="header">
         <a class="back-btn" href="{% url 'home' %}">
           <i class="bi bi-box-arrow-in-left"></i
@@ -172,9 +149,7 @@
       <div class="tabs">
         <a
           href="{% url 'movie_about' %}"
-          class="tab {% if request.path == '/movie_about/' %}active{% endif %}"
-          >About</a
-        >
+          class="tab {% if request.path == '/movie_about/' %}active{% endif %}">About</a>
         <a
           href="{% url 'movie_sessions' %}"
           class="tab {% if request.path == '/movie_sessions' %}active{% endif %}"
@@ -238,7 +213,6 @@
       </ul>
       <button class="select-session-btn">Выбрать сеанс</button>
     </div>
-  </div>
 </div>
 
 <script>
@@ -246,14 +220,10 @@
   const contents = document.querySelectorAll(".tab-content");
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
-      // Убираем активный класс у всех табов
       tabs.forEach((t) => t.classList.remove("active"));
-      // Скрываем все контенты
       contents.forEach((c) => (c.style.display = "none"));
 
-      // Добавляем активный класс к нажатому табу
       tab.classList.add("active");
-      // Показываем связанный контент
       const tabId = tab.getAttribute("data-tab");
       document.getElementById(tabId).style.display = "block";
     });

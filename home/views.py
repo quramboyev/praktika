@@ -8,3 +8,6 @@ def movie_about(request):
 
 def movie_sessions(request):
     return render(request, 'movie_sessions.html')
+
+def cinema_seets(request):
+    return render(request, 'seets.html')

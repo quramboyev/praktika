@@ -1,32 +1,37 @@
 {% extends 'layouts/base.html' %} {% load static %} {% block content %}
 
 <style>
-  .sessions-container {
+  .container {
+    background-color: #1e293b;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     max-width: 1000px;
     width: 100%;
-    margin: 20px auto;
-    background-color: #1e293b; /* как на первой странице */
-    border-radius: 12px; /* закругления */
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* тень */
     box-sizing: border-box;
-    padding: 20px 30px;
+    margin-top: 20px;
+  }
+  .movie-details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .sessions-container {
+    max-width: 1000px;
+    margin: 20px auto;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    color: #cbd5e1; /* светлый текст */
   }
 
-  /* Заголовок */
   .sessions-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
     font-size: 18px;
-    color: #94a3b8; /* более светлый оттенок */
+    color: #94a3b8;
   }
 
-  /* Таблица */
   .sessions-table thead th {
-    background-color: #334155; /* как в первой странице разделитель */
+    background-color: #334155;
     color: #94a3b8;
     border-bottom: 2px solid #475569;
     padding: 12px 15px;
@@ -64,10 +69,10 @@
     width: 140px;
   }
 
-  .time {
+  .time, .seets_link {
     font-weight: 700;
     font-size: 18px;
-    color: #ff8036; /* оранжевый, как кнопка первой страницы */
+    color: #ff8036;
   }
 
   .lang {
@@ -76,7 +81,6 @@
     margin-top: 4px;
   }
 
-  /* Остальные элементы с цветами под стиль первой страницы */
   .sort-time {
     cursor: pointer;
     user-select: none;
@@ -92,7 +96,6 @@
     color: #ff8036;
   }
 
-  /* Переключатель */
   .switch .slider {
     background-color: #475569;
   }
@@ -100,7 +103,6 @@
     background-color: #ff8036;
   }
 
-  /* Кнопки и ссылки */
   .back-btn {
     color: #cbd5e1;
     font-size: 28px;
@@ -140,117 +142,92 @@
   }
 </style>
 
-<header class="header">
-  <a class="back-btn" href="{% url 'home' %}">
-    <i class="bi bi-box-arrow-in-left"></i
-  ></a>
-  <h1 class="title">The Batman</h1>
-</header>
+<div class="container">
+  <div class="movie-details">
+    <header class="header">
+      <a class="back-btn" href="{% url 'home' %}">
+        <i class="bi bi-box-arrow-in-left"></i
+      ></a>
+      <h1 class="title">The Batman</h1>
+    </header>
 
-<div class="tabs">
-  <a
-    href="{% url 'movie_about' %}"
-    class="tab {% if request.path == '/movie_about/' %}active{% endif %}"
-    >About</a
-  >
-  <a
-    href="{% url 'movie_sessions' %}"
-    class="tab {% if request.path == '/movie_sessions' %}active{% endif %}"
-    >Sessions</a
-  >
-</div>
+    <div class="tabs">
+      <a
+        href="{% url 'movie_about' %}"
+        class="tab {% if request.path == '/movie_about/' %}active{% endif %}"
+        >About</a
+      >
+      <a
+        href="{% url 'movie_sessions' %}"
+        class="tab {% if request.path == '/movie_sessions' %}active{% endif %}"
+        >Sessions</a
+      >
+    </div>
+    <div class="sessions-container">
+      <div class="sessions-header">
+        <div class="date">April, 18</div>
+        <div class="sort-time">Time ↑</div>
+        <div class="toggle-cinema">
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+          <span>By cinema</span>
+        </div>
+      </div>
 
-<div class="sessions-container">
-  <div class="sessions-header">
-    <div class="date">April, 18</div>
-    <div class="sort-time">Time ↑</div>
-    <div class="toggle-cinema">
-      <label class="switch">
-        <input type="checkbox" checked />
-        <span class="slider"></span>
-      </label>
-      <span>By cinema</span>
+      <table class="sessions-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Adult</th>
+            <th>Child</th>
+            <th>Student</th>
+            <th>VIP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="cinema-name">
+            <td colspan="5">
+              <strong>Eurasia Cinema7</strong>
+              <span class="distance">1.5km</span><br />ул. Петрова, д.24, ТЦ
+              "Евразия"
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="time"><a href="{% url 'seets' %}" class="seets_link">14:40</a></div>
+              <div class="lang">Рус</div>
+            </td>
+            <td>2200 ₸</td>
+            <td>1000 ₸</td>
+            <td>1500 ₸</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="time"><a href="{% url 'seets' %}" class="seets_link">15:10</a></div>
+              <div class="lang">IMAX Рус</div>
+            </td>
+            <td>3500 ₸</td>
+            <td>1500 ₸</td>
+            <td>2500 ₸</td>
+            <td>4000 ₸</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="time"><a href="{% url 'seets' %}" class="seets_link">15:40</a></div>
+              <div class="lang">Laser Eng</div>
+            </td>
+            <td>2700 ₸</td>
+            <td>900 ₸</td>
+            <td>1700 ₸</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-
-  <table class="sessions-table">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Adult</th>
-        <th>Child</th>
-        <th>Student</th>
-        <th>VIP</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="cinema-name">
-        <td colspan="5">
-          <strong>Eurasia Cinema7</strong>
-          <span class="distance">1.5km</span><br />
-          ул. Петрова, д.24, ТЦ "Евразия"
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <div class="time">14:40</div>
-          <div class="lang">Рус</div>
-        </td>
-        <td>2200 ₸</td>
-        <td>1000 ₸</td>
-        <td>1500 ₸</td>
-        <td>—</td>
-      </tr>
-      <tr>
-        <td>
-          <div class="time">15:10</div>
-          <div class="lang">IMAX Рус</div>
-        </td>
-        <td>3500 ₸</td>
-        <td>1500 ₸</td>
-        <td>2500 ₸</td>
-        <td>4000 ₸</td>
-      </tr>
-      <tr>
-        <td>
-          <div class="time">15:40</div>
-          <div class="lang">Laser Eng</div>
-        </td>
-        <td>2700 ₸</td>
-        <td>900 ₸</td>
-        <td>1700 ₸</td>
-        <td>—</td>
-      </tr>
-
-      <tr class="cinema-name">
-        <td colspan="5">
-          <strong>Arman Asia Park</strong>
-          <span class="distance">5km</span><br />
-          пр. Кабанбай батыра 21, ТРЦ «Asia Park»
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <div class="time">16:05</div>
-          <div class="lang">Каз</div>
-        </td>
-        <td>1900 ₸</td>
-        <td>—</td>
-        <td>1200 ₸</td>
-        <td>—</td>
-      </tr>
-      <tr>
-        <td>
-          <div class="time">16:15</div>
-          <div class="lang">Рус</div>
-        </td>
-        <td>2300 ₸</td>
-        <td>—</td>
-        <td>1600 ₸</td>
-        <td>—</td>
-      </tr>
-    </tbody>
-  </table>
 </div>
 
 <script>
@@ -258,14 +235,10 @@
   const contents = document.querySelectorAll(".tab-content");
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
-      // Убираем активный класс у всех табов
       tabs.forEach((t) => t.classList.remove("active"));
-      // Скрываем все контенты
       contents.forEach((c) => (c.style.display = "none"));
 
-      // Добавляем активный класс к нажатому табу
       tab.classList.add("active");
-      // Показываем связанный контент
       const tabId = tab.getAttribute("data-tab");
       document.getElementById(tabId).style.display = "block";
     });
