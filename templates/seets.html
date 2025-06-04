@@ -145,7 +145,6 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-    display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -339,7 +338,9 @@
     return seatCount * ticketPrice;
   }
 
-  document.getElementById("buyBtn").addEventListener("click", function () {
+  document.getElementById("buyBtn").addEventListener("click", () => {
+
+    console.log("working")
     const selectedSeatsText = selectedSeats
       .map((seat) => {
         const [row, seatNum] = seat.split("-");
@@ -356,7 +357,7 @@
 
     const total = calculateTotal("adult", selectedSeats.length);
     document.getElementById("totalDisplay").textContent = Math.round(total);
-
+    console.log(modal)
     modal.classList.remove("hidden");
   });
 
@@ -388,6 +389,7 @@
   }
 
   continueBtn.addEventListener("click", () => {
+    console.log("kjhbaef")
     const ticketType = document.getElementById("ticketType").value;
     const total = calculateTotal(ticketType, selectedSeats.length);
 
