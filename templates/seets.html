@@ -15,6 +15,15 @@
     color: #fff;
     user-select: none;
   }
+  .back-btn {
+    color: #cbd5e1;
+    font-size: 28px;
+    cursor: pointer;
+    margin-right: 16px;
+    padding-left: 10px;
+    user-select: none;
+    line-height: 1;
+  }
   .screen {
     text-align: center;
     margin-bottom: 20px;
@@ -126,24 +135,127 @@
     border: 1px solid red;
     min-height: 300px;
   }
-</style>
 
+  #modalOverlay,
+  #phoneModal,
+  #finalTicketModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  #modalOverlay > div,
+  #phoneModal > div,
+  #finalTicketModal > div {
+    background-color: #1e293b;
+    padding: 30px;
+    border-radius: 12px;
+    color: white;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 20px rgba(255, 111, 0, 0.5);
+  }
+
+  #ticketModal {
+    background-color: #1e293b;
+    padding: 30px;
+    border-radius: 12px;
+    color: white;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 20px rgba(255, 111, 0, 0.5);
+  }
+  .btn-close {
+    background-color: transparent;
+    border: 2px solid #ff8036;
+    color: #ff8036;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .btn-close:hover {
+    background-color: #ff8036;
+    color: white;
+  }
+
+  .btn-continue {
+    background-color: #ff8036;
+    border: none;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .btn-continue:hover {
+    background-color: #fb923c;
+  }
+</style>
 <div class="container">
+  <a class="back-btn" href="{% url 'movie_sessions' %}">
+    <i class="bi bi-box-arrow-in-left"></i>
+  </a>
   <h3 class="text-center mb-3">Eurasia Cinema7 — The Batman</h3>
 
   <div class="screen">SCREEN</div>
   <div class="seets" id="seatsContainer"></div>
   <div id="buySection" class="d-none">
-    <button id="buyBtn" class="" type="button">
+    <button id="buyBtn" type="button">
       Купить билеты — <span id="totalPrice">0</span> ₽
     </button>
   </div>
 </div>
 
+<!-- Модалка оплаты -->
+<div id="modalOverlay" class="modal hidden">
+  <div class="modal-content">
+    <h2>Pay for tickets</h2>
+    <p><strong>The Batman</strong></p>
+    <p><strong>Cinema:</strong> Eurasia Cinema7</p>
+    <p><strong>Date:</strong> 6 April 2022, 14:40</p>
+    <p><strong>Hall:</strong> 6th</p>
+    <p><strong>Seats:</strong> <span id="selectedSeatsDisplay">—</span></p>
+
+    <label for="ticketType"><strong>Ticket Type:</strong></label>
+    <select
+      id="ticketType"
+      style="width: 100%; padding: 8px; border-radius: 8px; margin: 8px 0"
+    >
+      <option value="adult">Adult</option>
+      <option value="student">Student (-20%)</option>
+      <option value="child">Child (-50%)</option>
+    </select>
+
+    <p><strong>Total:</strong> <span id="totalDisplay">0</span> ₽</p>
+    <input
+      id="phoneInput"
+      type="text"
+      placeholder="Phone number"
+      style="width: 100%; padding: 8px; border-radius: 8px; margin: 10px 0"
+    />
+
+    <div style="display: flex; justify-content: space-between; gap: 10px">
+      <button id="closeModal" class="btn-close">×</button>
+      <button id="continueBtn" class="btn-continue">Continue</button>
+    </div>
+  </div>
+</div>
+
+{% include 'ticket.html' %}
+
 <script>
   const seatsContainer = document.getElementById("seatsContainer");
   const selectedSeats = [];
-  const ticketPrice = 500;
 
   const seatMap = [
     [true, true, true, true, true, true, true, true],
@@ -158,6 +270,8 @@
     [false, false, false, true, true, true, true, true],
   ];
 
+  const ticketPrice = 2200;
+
   function renderSeats() {
     seatsContainer.innerHTML = "";
     for (let row = 0; row < seatMap.length; row++) {
@@ -170,10 +284,7 @@
         seatBtn.classList.add("seat");
         seatBtn.textContent = seatNum + 1;
 
-        // Первый ряд все места заняты и неактивны
-        if (row === 0) {
-          seatBtn.classList.add("occupied");
-        } else if (isOccupied) {
+        if (isOccupied) {
           seatBtn.classList.add("occupied");
         } else {
           seatBtn.classList.add("available");
@@ -184,26 +295,24 @@
 
         rowDiv.appendChild(seatBtn);
       }
-
       seatsContainer.appendChild(rowDiv);
     }
   }
 
   function toggleSeat(row, seatNum, seatBtn) {
-  const seatId = `${row}-${seatNum}`;
-  const index = selectedSeats.indexOf(seatId);
+    const seatId = `${row}-${seatNum}`;
+    const index = selectedSeats.indexOf(seatId);
 
-  if (index === -1) {
-    selectedSeats.push(seatId);
-    seatBtn.classList.add("selected");
-  } else {
-    selectedSeats.splice(index, 1);
-    seatBtn.classList.remove("selected");
+    if (index === -1) {
+      selectedSeats.push(seatId);
+      seatBtn.classList.add("selected");
+    } else {
+      selectedSeats.splice(index, 1);
+      seatBtn.classList.remove("selected");
+    }
+
+    updateBuySection();
   }
-
-  updateBuySection();
-  console.log("Selected seats:", selectedSeats);
-}
 
   function updateBuySection() {
     const buySection = document.getElementById("buySection");
@@ -217,6 +326,85 @@
       totalPriceSpan.textContent = 0;
     }
   }
+
   renderSeats();
+
+  const modal = document.getElementById("modalOverlay");
+  const ticketModal = document.getElementById("ticketModal");
+  const continueBtn = document.getElementById("continueBtn");
+
+  function calculateTotal(type, seatCount) {
+    if (type === "student") return seatCount * ticketPrice * 0.8;
+    if (type === "child") return seatCount * ticketPrice * 0.5;
+    return seatCount * ticketPrice;
+  }
+
+  document.getElementById("buyBtn").addEventListener("click", function () {
+    const selectedSeatsText = selectedSeats
+      .map((seat) => {
+        const [row, seatNum] = seat.split("-");
+        return `Row ${parseInt(row) + 1}, Seat ${parseInt(seatNum) + 1}`;
+      })
+      .join("; ");
+
+    document.getElementById("selectedSeatsDisplay").textContent =
+      selectedSeatsText;
+
+    // Сбросить тип билета при открытии модалки
+    const ticketTypeSelect = document.getElementById("ticketType");
+    ticketTypeSelect.value = "adult";
+
+    const total = calculateTotal("adult", selectedSeats.length);
+    document.getElementById("totalDisplay").textContent = Math.round(total);
+
+    modal.classList.remove("hidden");
+  });
+
+  document.getElementById("closeModal").addEventListener("click", function () {
+    modal.classList.add("hidden");
+  });
+
+  document.getElementById("ticketType").addEventListener("change", function () {
+    const type = this.value;
+    const total = calculateTotal(type, selectedSeats.length);
+    document.getElementById("totalDisplay").textContent = Math.round(total);
+  });
+
+  function formatSeats(seats) {
+    if (seats.length === 0) return "";
+    const rows = {};
+    seats.forEach((seat) => {
+      const [row, seatNum] = seat.split("-");
+      if (!rows[row]) rows[row] = [];
+      rows[row].push(parseInt(seatNum) + 1);
+    });
+
+    return Object.entries(rows)
+      .map(([row, seats]) => {
+        seats.sort((a, b) => a - b);
+        return `${parseInt(row) + 1} row (${seats.join(", ")})`;
+      })
+      .join("; ");
+  }
+
+  continueBtn.addEventListener("click", () => {
+    const ticketType = document.getElementById("ticketType").value;
+    const total = calculateTotal(ticketType, selectedSeats.length);
+
+    modal.classList.add("hidden");
+
+    const seatsDisplay = ticketModal.querySelector("#ticketSeats");
+    const costDisplay = ticketModal.querySelector("#ticketCost");
+
+    if (seatsDisplay) seatsDisplay.textContent = formatSeats(selectedSeats);
+    if (costDisplay) costDisplay.textContent = `${Math.round(total)} ₸ (paid)`;
+
+    ticketModal.classList.remove("hidden");
+  });
+
+  document.querySelector(".close-btn").addEventListener("click", () => {
+    ticketModal.classList.add("hidden");
+  });
 </script>
+
 {% endblock %}
