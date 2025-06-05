@@ -143,17 +143,17 @@
         <a class="back-btn" href="{% url 'home' %}">
           <i class="bi bi-box-arrow-in-left"></i
         ></a>
-        <h1 class="title">The Batman</h1>
+        <h1 class="title">Бэтман</h1>
       </header>
 
       <div class="tabs">
         <a
           href="{% url 'movie_about' %}"
-          class="tab {% if request.path == '/movie_about/' %}active{% endif %}">About</a>
+          class="tab {% if request.path == '/movie_about/' %}active{% endif %}">О фильме</a>
         <a
           href="{% url 'movie_sessions' %}"
           class="tab {% if request.path == '/movie_sessions' %}active{% endif %}"
-          >Sessions</a
+          >Сессии</a
         >
       </div>
 
@@ -179,39 +179,38 @@
       </div>
 
       <p class="description">
-        When the Riddler, a sadistic serial killer, begins murdering key
-        political figures in Gotham, Batman is forced to investigate the city's
-        hidden corruption and question his family's involvement.
+        Когда Загадочник, садист и серийный убийца, 
+        начинает убивать ключевых политических деятелей 
+        Готэма, Бэтмен вынужден расследовать скрытую коррупцию
+         в городе и усомниться в причастности к этому своей семьи.
       </p>
 
       <ul class="info-list">
         <li>
-          <span class="label">Certificate</span>
+          <span class="label">Сертификат</span>
           <span class="certificate">16+</span>
         </li>
         <li>
-          <span class="label">Runtime</span> <span class="value">02:56</span>
+          <span class="label">Время выполнения</span> <span class="value">02:56</span>
         </li>
         <li>
-          <span class="label">Release</span> <span class="value">2022</span>
+          <span class="label">Выпуск</span> <span class="value">2022</span>
         </li>
         <li>
-          <span class="label">Genre</span>
-          <span class="value">Action, Crime, Drama</span>
+          <span class="label">Жанр</span>
+          <span class="value">Боевик, Криминал, Драма</span>
         </li>
         <li>
-          <span class="label">Director</span>
-          <span class="value">Matt Reeves</span>
+          <span class="label">Директор</span>
+          <span class="value">Мэтт Ривз</span>
         </li>
         <li>
-          <span class="label">Cast</span>
+          <span class="label">В ролях</span>
           <span class="value"
-            >Robert Pattinson, Zoë Kravitz, Jeffrey Wright, Colin Farrell, Paul
-            Dano, John Turturro, Andy Serkis, Peter Sarsgaard</span
-          >
+            >Роберт Паттинсон, Зои Кравиц, Джеффри Райт, Колин Фаррелл, Пол Дано, Джон Туртурро, Энди Серкис, Питер Сарсгаард</span>
         </li>
       </ul>
-      <button class="select-session-btn">Выбрать сеанс</button>
+      <a href="{% url 'movie_sessions' %}"><button class="select-session-btn">Выбрать сеанс</button></a>
     </div>
 </div>
 

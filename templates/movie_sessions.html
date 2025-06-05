@@ -149,49 +149,49 @@
     <header class="header">
       <a class="back-btn" href="{% url 'home' %}">
         <i class="bi bi-box-arrow-in-left"></i></a>
-      <h1 class="title">The Batman</h1>
+      <h1 class="title">Бэтман</h1>
     </header>
 
     <div class="tabs">
       <a
         href="{% url 'movie_about' %}"
         class="tab {% if request.path == '/movie_about/' %}active{% endif %}"
-        >About</a
+        >О фильме</a
       >
       <a
         href="{% url 'movie_sessions' %}"
         class="tab {% if request.path == '/movie_sessions' %}active{% endif %}"
-        >Sessions</a
+        >Сессии</a
       >
     </div>
     <div class="sessions-container">
       <div class="sessions-header">
-        <div class="date">April, 18</div>
-        <div class="sort-time">Time ↑</div>
+        <div class="date">Апрель, 18</div>
+        <div class="sort-time">По времени ↑</div>
         <div class="toggle-cinema">
           <label class="switch">
             <input type="checkbox" checked />
             <span class="slider"></span>
           </label>
-          <span>By cinema</span>
+          <span>По кино</span>
         </div>
       </div>
 
       <table class="sessions-table">
         <thead>
           <tr>
-            <th>Time</th>
-            <th>Adult</th>
-            <th>Child</th>
-            <th>Student</th>
+            <th>Время</th>
+            <th>Взрослые</th>
+            <th>Дети</th>
+            <th>Студенты</th>
             <th>VIP</th>
           </tr>
         </thead>
         <tbody>
           <tr class="cinema-name">
             <td colspan="5">
-              <strong>Eurasia Cinema7</strong>
-              <span class="distance">1.5km</span><br />ул. Петрова, д.24, ТЦ
+              <strong>Евразия кинотеатр 7</strong>
+              <span class="distance">1.5км</span><br />ул. Петрова, д.24, ТЦ
               "Евразия"
             </td>
           </tr>
@@ -200,9 +200,9 @@
               <div class="time"><a href="{% url 'seets' %}" class="seets_link">14:40</a></div>
               <div class="lang">Рус</div>
             </td>
-            <td>2200 ₸</td>
-            <td>1000 ₸</td>
-            <td>1500 ₸</td>
+            <td>2200 ₽</td>
+            <td>1000 ₽</td>
+            <td>1500 ₽</td>
             <td>—</td>
           </tr>
           <tr>
@@ -210,19 +210,19 @@
               <div class="time"><a href="{% url 'seets' %}" class="seets_link">15:10</a></div>
               <div class="lang">IMAX Рус</div>
             </td>
-            <td>3500 ₸</td>
-            <td>1500 ₸</td>
-            <td>2500 ₸</td>
-            <td>4000 ₸</td>
+            <td>3500 ₽</td>
+            <td>1500 ₽</td>
+            <td>2500 ₽</td>
+            <td>4000 ₽</td>
           </tr>
           <tr>
             <td>
               <div class="time"><a href="{% url 'seets' %}" class="seets_link">15:40</a></div>
               <div class="lang">Laser Eng</div>
             </td>
-            <td>2700 ₸</td>
-            <td>900 ₸</td>
-            <td>1700 ₸</td>
+            <td>2700 ₽</td>
+            <td>900 ₽</td>
+            <td>1700 ₽</td>
             <td>—</td>
           </tr>
         </tbody>

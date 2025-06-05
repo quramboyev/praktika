@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
 
     'home',
+    'home_auth',
 ]
 
 MIDDLEWARE = [

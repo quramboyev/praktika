@@ -1,6 +1,18 @@
 from django import forms
 from django.core.exceptions import ValidationError
 import re
+from .models import Card
+
+class CardForm(forms.ModelForm):
+    class Meta:
+        model = Card
+        fields = ['card_number', 'expiry_month', 'expiry_year', 'cvc']
+        widgets = {
+            'card_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Card number'}),
+            'expiry_month': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'MM'}),
+            'expiry_year': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'YY'}),
+            'cvc': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'CVC'}),
+        }
 
 class LoginForm(forms.Form):
     number = forms.CharField(required=True)

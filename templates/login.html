@@ -1,6 +1,4 @@
-{% extends 'layouts/base.html' %}
-{% load crispy_forms_filters %}
-
+{% extends 'layouts/base.html' %} {% load crispy_forms_filters %} 
 {% block content %}
 <style>
   .card {
@@ -42,23 +40,268 @@
   .text-muted {
     color: #7a89a5 !important;
   }
+
+  .payments-history {
+  color: #a0aec0; /* светло-серый текст */
+  font-family: Arial, sans-serif;
+}
+
+.payments-history h5 {
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: #94a3b8;
+}
+
+.payment-item {
+  background-color: #1e293b; /* тёмно-синий фон */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  gap: 12px;
+  max-width: 400px;
+  color: white;
+}
+
+.payment-poster {
+  width: 60px;
+  height: 90px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.payment-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.payment-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.payment-date {
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+  color: #cbd5e1;
+}
+
+.payment-location {
+  font-size: 0.85rem;
+  color: #64748b;
+}
 </style>
 
-<div class="col-6 offset-3" >
+<div class="col-6 offset-3">
+  {% if not request.user.is_authenticated %}
   <div class="card shadow-sm">
     <div class="card-header">
       Login
-      <div class="text-muted" style="font-weight: 500; font-size: 0.9rem; margin-top: 4px;">
+      <div
+        class="text-muted"
+        style="font-weight: 500; font-size: 0.9rem; margin-top: 4px"
+      >
         Access to purchased tickets
       </div>
     </div>
-    <div class="card-body" style="background-color: #7a89a5;">
+    <div class="card-body" style="background-color: #7a89a5">
       <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+        {% csrf_token %} {{ form.as_p }}
         <button type="submit" class="btn btn-continue mt-3">Continue</button>
       </form>
     </div>
   </div>
+  {% endif %}
 </div>
-{% endblock %}
+
+<!-- Profile Modal -->
+<div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div
+      class="modal-content text-center p-3"
+      style="background-color: #0f172a; border-radius: 15px"
+    >
+      <div class="modal-header border-0">
+        <h5 class="modal-title w-100 text-white">
+          {{ request.user.username }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-start">
+        <p class="text-secondary mb-1">Saved cards</p>
+        <ul class="list-group mb-3">
+          {% for card in cards %}
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            style="
+              background-color: #1e293b;
+              border: none;
+              color: #cbd5e1;
+              border-radius: 8px;
+            "
+          >
+            {{ card.masked_number }}
+            <span>{{ card.expiry_month }}/{{ card.expiry_year }}</span>
+            <form
+              method="post"
+              action="{% url 'delete_card' card.id %}"
+              style="margin: 0"
+            >
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-danger ms-2">
+                ✕
+              </button>
+            </form>
+          </li>
+          {% empty %}
+          <li
+            class="list-group-item text-muted"
+            style="background-color: #1e293b; border: none; border-radius: 8px"
+          >
+            No saved cards
+          </li>
+          {% endfor %}
+        </ul>
+        <form method="post" action="{% url 'profile' %}">
+          {% csrf_token %} {{ form.as_p }}
+          <button id="addCardForm" type="submit" class="btn btn-continue">
+            Add card
+          </button>
+        </form>
+
+        <div class="payments-history">
+          <h5>Payments history</h5>
+          <div class="payment-item">
+            <img
+              src="path_to_batman_poster.jpg"
+              alt="The Batman poster"
+              class="payment-poster"
+            />
+            <div class="payment-info">
+              <div class="payment-title">The Batman</div>
+              <div class="payment-date">6 April 2022, 14:40</div>
+              <div class="payment-location">Eurasia Cinema7</div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <div style="font-size: 50px; opacity: 0.4">🍿</div>
+          <p class="mt-2 text-muted">You haven't bought tickets yet</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Card Modal -->
+<div class="modal fade" id="addCardModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div
+      class="modal-content p-4"
+      style="background-color: #0f172a; border-radius: 15px"
+    >
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-white">Add card</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="addCardForm">
+          <div class="mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Card number"
+              maxlength="19"
+              required
+            />
+          </div>
+          <div class="d-flex gap-2 mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="MM"
+              maxlength="2"
+              style="max-width: 60px"
+              required
+            />
+            <input
+              type="text"
+              class="form-control"
+              placeholder="YY"
+              maxlength="2"
+              style="max-width: 60px"
+              required
+            />
+            <input
+              type="text"
+              class="form-control"
+              placeholder="CVC"
+              maxlength="3"
+              style="max-width: 80px"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-continue">Add card</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if request.session.show_modal %}
+<script>
+  var modal = new bootstrap.Modal(document.getElementById("profileModal"));
+  modal.show();
+  fetch("{% url 'clear-modal-flag' %}");
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const addCardForm = document.getElementById("addCardForm");
+    const addCardModal = bootstrap.Modal.getInstance(
+      document.getElementById("addCardModal")
+    );
+    const profileModal = new bootstrap.Modal(
+      document.getElementById("profileModal")
+    );
+
+    if (addCardForm) {
+      addCardForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(addCardForm);
+        const csrfToken = document.querySelector(
+          "[name=csrfmiddlewaretoken]"
+        ).value;
+
+        const response = await fetch("{% url 'profile' %}", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrfToken,
+          },
+          body: formData,
+        });
+
+        if (response.ok) {
+          // Закрыть модалку и обновить профильную
+          bootstrap.Modal.getInstance(
+            document.getElementById("addCardModal")
+          ).hide();
+          location.reload(); // Или обнови только список карт через fetch
+        } else {
+          alert("Ошибка при добавлении карты.");
+        }
+      });
+    }
+  });
+</script>
+{% endif %} {% endblock %}
