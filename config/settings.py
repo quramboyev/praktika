@@ -15,7 +15,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    "rosetta",
+    "parler",
     'crispy_forms',
     'crispy_bootstrap5',
 
@@ -75,13 +76,37 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+from django.utils.translation import gettext_lazy as _
 
+LANGUAGE_CODE = "en"
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGES = (
+    ('en', _('English')),
+    ('ru', _('Russian')),
+    ('uz', _('Uzbek'))
+)
 
-TIME_ZONE = 'Asia/Tashkent'
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
+PARLER_LANGUAGES = {
+    None: (
+        {'code': 'en'},
+        {'code': 'ru'},
+        {'code': 'uz'}
+    ),
+    'default': {
+        'fallback': 'en',
+        'hide_untranslated': False,
+    }
+}
+
+TIME_ZONE = "Asia/Tashkent"
 
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = False
 
