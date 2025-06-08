@@ -67,7 +67,10 @@ class MovieModel(TranslatableModel):
 
     @property
     def average_rating(self):
-        return self.ratings.annotate(average=models.Avg('rating'))["average"]
+        res = self.ratings.all().aggregate(average=models.Avg('rating'))['average']
+        if not res:
+            return 0
+        return res
 
     class Meta:
         db_table = 'movies'
