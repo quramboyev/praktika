@@ -71,7 +71,7 @@
     width: 140px;
   }
 
-  .time, .seets_link {
+  .time, .seats_link {
     font-weight: 700;
     font-size: 18px;
     color: #ff8036;
@@ -154,12 +154,12 @@
 
     <div class="tabs">
       <a
-        href="{% url 'movie_about' %}"
+        href="{% url 'movie_about' movie.id %}"
         class="tab {% if request.path == '/movie_about/' %}active{% endif %}"
         >О фильме</a
       >
       <a
-        href="{% url 'movie_sessions' %}"
+        href="{% url 'movie_sessions' movie.id %}"
         class="tab {% if request.path == '/movie_sessions' %}active{% endif %}"
         >Сессии</a
       >
@@ -188,43 +188,25 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="cinema-name">
-            <td colspan="5">
-              <strong>Евразия кинотеатр 7</strong>
-              <span class="distance">1.5км</span><br />ул. Петрова, д.24, ТЦ
-              "Евразия"
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="time"><a href="{% url 'seats' %}" class="seets_link">14:40</a></div>
-              <div class="lang">Рус</div>
-            </td>
-            <td>2200 ₽</td>
-            <td>1000 ₽</td>
-            <td>1500 ₽</td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="time"><a href="{% url 'seats' %}" class="seets_link">15:10</a></div>
-              <div class="lang">IMAX Рус</div>
-            </td>
-            <td>3500 ₽</td>
-            <td>1500 ₽</td>
-            <td>2500 ₽</td>
-            <td>4000 ₽</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="time"><a href="{% url 'seats' %}" class="seets_link">15:40</a></div>
-              <div class="lang">Laser Eng</div>
-            </td>
-            <td>2700 ₽</td>
-            <td>900 ₽</td>
-            <td>1700 ₽</td>
-            <td>—</td>
-          </tr>
+            {% for cinema in cinemas %}
+                <tr class="cinema-name">
+                    <td colspan="5">
+                        <strong>{{ cinema.name }}</strong>
+                        <p class="distance">{{ cinema.address }}</p>
+                    </td>
+                </tr>
+                {% for session in cinema.sessions.all %}
+                    <tr>
+                        <td>
+                          <div class="time">{{ session.time }}</div>
+                          <div class="lang">{{ session.options }}</div>
+                        </td>
+                        <td><a href="{% url 'seats' session.id %}?type=adult" class="seats_link">{{ session.adult }} ₽</a></td>
+                        <td><a href="{% url 'seats' session.id %}?type=child" class="seats_link">{{ session.child }} ₽</a></td>
+                        <td><a href="{% url 'seats' session.id %}?type=student" class="seats_link">{{ session.student }} ₽</a></td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
         </tbody>
       </table>
     </div>

@@ -148,10 +148,10 @@
 
       <div class="tabs">
         <a
-          href="{% url 'movie_about' %}"
+          href="{% url 'movie_about' pk=movie.id %}"
           class="tab {% if request.path == '/movie_about/' %}active{% endif %}">О фильме</a>
         <a
-          href="{% url 'movie_sessions' %}"
+          href="{% url 'movie_sessions' pk=movie.id %}"
           class="tab {% if request.path == '/movie_sessions' %}active{% endif %}"
           >Сессии</a
         >
@@ -210,7 +210,7 @@
             >Роберт Паттинсон, Зои Кравиц, Джеффри Райт, Колин Фаррелл, Пол Дано, Джон Туртурро, Энди Серкис, Питер Сарсгаард</span>
         </li>
       </ul>
-      <a href="{% url 'movie_sessions' %}"><button class="select-session-btn">Выбрать сеанс</button></a>
+      <a href="{% url 'movie_sessions' 1 %}"><button class="select-session-btn">Выбрать сеанс</button></a>
     </div>
 </div>
 

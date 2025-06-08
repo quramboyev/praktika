@@ -65,6 +65,10 @@ class MovieModel(TranslatableModel):
     image = models.ImageField(upload_to='movie_images', verbose_name=_('Movie image'))
     trailer = models.FileField(upload_to='movie_trailers', verbose_name=_('Movie trailer'))
 
+    @property
+    def average_rating(self):
+        return self.ratings.annotate(average=models.Avg('rating'))["average"]
+
     class Meta:
         db_table = 'movies'
         verbose_name = _('Movie')
@@ -108,9 +112,16 @@ class CinemaModel(TranslatableModel):
 
 class SessionModel(models.Model):
     time = models.TimeField(verbose_name=_('Time'))
-    options: list[str] = models.JSONField(default=list[str], verbose_name=_('Options'))
+    options = models.JSONField(default=list, verbose_name=_('Options'))
     movie = models.ForeignKey(MovieModel, on_delete=models.CASCADE, related_name='sessions', verbose_name=_('Movie'))
-    cinema = models.ForeignKey(CinemaModel, on_delete=models.CASCADE, verbose_name=_('Cinema'))
+    cinema = models.ForeignKey(CinemaModel, on_delete=models.CASCADE, verbose_name=_('Cinema'), related_name='sessions')
+    adult = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Adult Price'), default=0)
+    child = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Child Price'), default=0)
+    student = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Student Price'), default=0)
+
+    @property
+    def options_(self):
+        return ', '.join(self.options)
 
     class Meta:
         db_table = 'sessions'
@@ -118,7 +129,7 @@ class SessionModel(models.Model):
         verbose_name_plural = _('Sessions')
 
     def __str__(self):
-        return f"{self.time}: {', '.join(self.options)}"
+        return f"{self.time}: {self.options_}"
 
 
 class PriceType(models.TextChoices):
@@ -128,23 +139,9 @@ class PriceType(models.TextChoices):
     VIP = "V", _("VIP")
 
 
-class PriceModel(models.Model):
-    type = models.CharField(max_length=128, verbose_name=_('Price'), choices=PriceType.choices)
-    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Price'))
-    session = models.ForeignKey(SessionModel, on_delete=models.CASCADE, related_name='price', verbose_name=_('Session'))
-
-    class Meta:
-        db_table = 'prices'
-        verbose_name = _('Price')
-        verbose_name_plural = _('Prices')
-
-    def __str__(self):
-        return f"{self.type}: {self.price}"
-
-
 class TicketModel(models.Model):
     session = models.ForeignKey(SessionModel, on_delete=models.CASCADE, related_name='tickets', verbose_name=_('Session'))
-    price = models.ForeignKey(PriceModel, on_delete=models.CASCADE, related_name='tickets', verbose_name=_('Price'))
+    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Price'))
     seat_row = models.PositiveIntegerField(verbose_name=_('Seat row'))
     seat_column = models.PositiveIntegerField(verbose_name=_('Seat column'))
 
@@ -154,4 +151,4 @@ class TicketModel(models.Model):
         verbose_name_plural = _('Tickets')
 
     def __str__(self):
-        return f"{self.session}: {self.price}"
+        return f"{self.price}: {self.seat_row}-{self.seat_column}"

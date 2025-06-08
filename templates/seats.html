@@ -201,7 +201,7 @@
   }
 </style>
 <div class="container">
-  <a class="back-btn" href="{% url 'movie_sessions' %}">
+  <a class="back-btn" href="{% url 'movie_sessions' session.movie.id %}">
     <i class="bi bi-box-arrow-in-left"></i>
   </a>
   <h3 class="text-center mb-3">Евразия кинотеатр 7 — Бэтмен</h3>
@@ -210,7 +210,7 @@
   <div class="seets" id="seatsContainer"></div>
   <div id="buySection" class="d-none">
     <button id="buyBtn" type="button">
-      Купить билеты — <span id="totalPrice">0</span> ₽
+      Купить билеты — <span id="totalPrice">{{ price }}</span> ₽
     </button>
   </div>
 </div>
@@ -253,23 +253,20 @@
 {% include 'ticket.html' %}
 
 <script>
+    function createMatrix(N, M) {
+      return Array.from({ length: N }, () =>
+        Array.from({ length: M }, () => false)
+      );
+    }
   const seatsContainer = document.getElementById("seatsContainer");
   const selectedSeats = [];
 
-  const seatMap = [
-    [true, true, true, true, true, true, true, true],
-    [false, false, false, true, true, true, true, true],
-    [false, false, false, true, true, true, true, true],
-    [false, false, false, true, true, true, true, true],
-    [false, false, false, true, true, true, false, false],
-    [false, false, false, true, true, true, true, true],
-    [false, false, false, true, true, true, true, true],
-    [false, false, false, true, true, true, true, true],
-    [false, false, false, true, true, true, true, true],
-    [false, false, false, true, true, true, true, true],
-  ];
-
-  const ticketPrice = 2200;
+  const seatMap = createMatrix({{ rows }}, {{ cols }});
+  const occupied = {{ occupied }};
+  for (let item of occupied) {
+      seatMap[item[0]-1][item[1]-1] = true;
+  }
+  const ticketPrice = {{ price }};
 
   function renderSeats() {
     seatsContainer.innerHTML = "";

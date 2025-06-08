@@ -48,13 +48,15 @@
 <div class="container py-4">
   <div class="row g-4">
 
+    {% for movie in movies %}
     <div class="col-6 col-md-4 col-lg-3"> <!-- 4 колонки на lg (4x2), 3 колонки на md (3x2), 2 на xs -->
       <div class="movie-card">
-        <img src="{% static "main/images/the_batman.jpg" %}" alt="The Batman" class="movie-poster">
-        <div class="rating-badge">8.3</div>
+        <img src="{{ movie.image.url }}" alt="The Batman" class="movie-poster">
+        <div class="rating-badge">{{ movie.average_rating }}</div>
       </div>
-      <div class="movie-title" ><a class="movie-title" href="{% url 'movie_about' %}">Бэтмен</a></div>
+      <div class="movie-title" ><a class="movie-title" href="{% url 'movie_about' pk=movie.id %}">{{ movie.name }}</a></div>
     </div>
+    {% endfor %}
 
   </div>
 </div>
