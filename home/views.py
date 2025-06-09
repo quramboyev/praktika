@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from home.models import MovieModel, SessionModel, CinemaModel
 from django.utils.translation import gettext_lazy as _
 
 
+@login_required(login_url="login")
 def home(request):
     movies = MovieModel.objects.all().translated()
     return render(request, 'home.html', context={'movies': movies})
@@ -28,13 +30,13 @@ def cinema_seats(request, pk: int):
     match price_type:
         case "child":
             type_name = _("Child")
-            price = session.child
+            price = str(session.child).replace(',', '.')
         case "student":
             type_name = _("Student")
-            price = session.student
+            price = str(session.student).replace(',', '.')
         case _:
             type_name = _("Adult")
-            price = session.adult
+            price = str(session.adult).replace(',', '.')
     cinema = session.cinema
     rows = cinema.seats_row_count
     cols = cinema.seats_column_count

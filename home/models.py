@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFields
+from home_auth.models import User
 
 
 class GenreModel(TranslatableModel):
@@ -156,14 +157,8 @@ class SessionModel(models.Model):
         return f"{self.time}: {self.options_}"
 
 
-class PriceType(models.TextChoices):
-    ADULT = "A", _("Adult")
-    CHILDREN = "K", _("Children")
-    STUDENT = "S", _("Student")
-    VIP = "V", _("VIP")
-
-
 class TicketModel(models.Model):
+    user = models.ForeignKey(User, related_name="tickets", on_delete=models.CASCADE, verbose_name=_("User"))
     session = models.ForeignKey(SessionModel, on_delete=models.CASCADE, related_name='tickets', verbose_name=_('Session'))
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('Price'))
     seat_row = models.PositiveIntegerField(verbose_name=_('Seat row'))
