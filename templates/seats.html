@@ -31,7 +31,7 @@
     letter-spacing: 3px;
     font-size: 1.2rem;
   }
-  .seets {
+  .seats {
     width: 100%;
     padding: 30px 40px;
     border-radius: 12px;
@@ -207,7 +207,7 @@
   <h3 class="text-center mb-3">Евразия кинотеатр 7 — Бэтмен</h3>
 
   <div class="screen">ЭКРАН</div>
-  <div class="seets" id="seatsContainer"></div>
+  <div class="seats" id="seatsContainer"></div>
   <div id="buySection" class="d-none">
     <button id="buyBtn" type="button">
       Купить билеты — <span id="totalPrice">{{ price }}</span> ₽
@@ -220,21 +220,11 @@
   <div class="modal-content">
     <h2>Оплатить билеты</h2>
     <p><strong>Бэтмен</strong></p>
-    <p><strong>Кинотеатр:</strong> Евразия кинотеатр 7</p>
-    <p><strong>Дата:</strong> 6 Апрель 2022, 14:40</p>
-    <p><strong>Зал:</strong> 6</p>
+    <p><strong>Кинотеатр:</strong>{{ cinema.name }}</p>
+    <p><strong>Дата:</strong>{{ session.time }}</p>
     <p><strong>Места:</strong> <span id="selectedSeatsDisplay">—</span></p>
 
-    <label for="ticketType"><strong>Тип билета:</strong></label>
-    <select
-      id="ticketType"
-      style="width: 100%; padding: 8px; border-radius: 8px; margin: 8px 0"
-    >
-      <option value="adult">Взрослый</option>
-      <option value="student">Студент (-20%)</option>
-      <option value="child">Дети (-50%)</option>
-    </select>
-
+    <span><strong>Тип билета:</strong> {{ type_name }}</span>
     <p><strong>Общая:</strong> <span id="totalDisplay">0</span> ₽</p>
     <input
       id="phoneInput"
@@ -242,7 +232,6 @@
       placeholder="Телефон номер"
       style="width: 100%; padding: 8px; border-radius: 8px; margin: 10px 0"
     />
-
     <div style="display: flex; justify-content: space-between; gap: 10px">
       <button id="closeModal" class="btn-close"></button>
       <button id="continueBtn" class="btn-continue">Продолжить</button>
@@ -278,7 +267,7 @@
         const isOccupied = seatMap[row][seatNum];
         const seatBtn = document.createElement("div");
         seatBtn.classList.add("seat");
-        seatBtn.textContent = seatNum + 1;
+        seatBtn.textContent = `${seatNum + 1}`;
 
         if (isOccupied) {
           seatBtn.classList.add("occupied");
@@ -316,10 +305,10 @@
 
     if (selectedSeats.length > 0) {
       buySection.classList.remove("d-none");
-      totalPriceSpan.textContent = selectedSeats.length * ticketPrice;
+      totalPriceSpan.textContent = `${selectedSeats.length * ticketPrice}`;
     } else {
       buySection.classList.add("d-none");
-      totalPriceSpan.textContent = 0;
+      totalPriceSpan.textContent = "0";
     }
   }
 
@@ -328,44 +317,23 @@
   const modal = document.getElementById("modalOverlay");
   const ticketModal = document.getElementById("ticketModal");
   const continueBtn = document.getElementById("continueBtn");
-
-  function calculateTotal(type, seatCount) {
-    if (type === "student") return seatCount * ticketPrice * 0.8;
-    if (type === "child") return seatCount * ticketPrice * 0.5;
-    return seatCount * ticketPrice;
-  }
+  const total = ticketPrice * selectedSeats.length
 
   document.getElementById("buyBtn").addEventListener("click", () => {
+      document.getElementById("selectedSeatsDisplay").textContent =
+      selectedSeats
+          .map((seat) => {
+              const [row, seatNum] = seat.split("-");
+              return `Row ${parseInt(row) + 1}, Seat ${parseInt(seatNum) + 1}`;
+          })
+          .join("; ");
 
-    console.log("working")
-    const selectedSeatsText = selectedSeats
-      .map((seat) => {
-        const [row, seatNum] = seat.split("-");
-        return `Row ${parseInt(row) + 1}, Seat ${parseInt(seatNum) + 1}`;
-      })
-      .join("; ");
-
-    document.getElementById("selectedSeatsDisplay").textContent =
-      selectedSeatsText;
-
-    // Сбросить тип билета при открытии модалки
-    const ticketTypeSelect = document.getElementById("ticketType");
-    ticketTypeSelect.value = "adult";
-
-    const total = calculateTotal("adult", selectedSeats.length);
     document.getElementById("totalDisplay").textContent = Math.round(total);
-    console.log(modal)
     modal.classList.remove("hidden");
   });
 
   document.getElementById("closeModal").addEventListener("click", function () {
     modal.classList.add("hidden");
-  });
-
-  document.getElementById("ticketType").addEventListener("change", function () {
-    const type = this.value;
-    const total = calculateTotal(type, selectedSeats.length);
-    document.getElementById("totalDisplay").textContent = Math.round(total);
   });
 
   function formatSeats(seats) {
@@ -386,10 +354,6 @@
   }
 
   continueBtn.addEventListener("click", () => {
-    console.log("kjhbaef")
-    const ticketType = document.getElementById("ticketType").value;
-    const total = calculateTotal(ticketType, selectedSeats.length);
-
     modal.classList.add("hidden");
 
     const seatsDisplay = ticketModal.querySelector("#ticketSeats");

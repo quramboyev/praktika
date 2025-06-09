@@ -143,7 +143,7 @@
         <a class="back-btn" href="{% url 'home' %}">
           <i class="bi bi-box-arrow-in-left"></i
         ></a>
-        <h1 class="title">Бэтман</h1>
+        <h1 class="title">{{ movie.name }}</h1>
       </header>
 
       <div class="tabs">
@@ -156,58 +156,42 @@
           >Сессии</a
         >
       </div>
-
-      <iframe
-        width="100%"
-        height="315"
-        src="https://www.youtube.com/embed/mqqft2x_Aa4?si=vFj-cMNtvunnM_gu"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      ></iframe>
+      <video src="{{ movie.trailer.url }}" controls autoplay></video>
       <div class="ratings">
-        <div class="rating">
-          <div class="score">8.3</div>
-          <div class="source">IMDB</div>
-        </div>
-        <div class="rating">
-          <div class="score">7.9</div>
-          <div class="source">Kinopoisk</div>
-        </div>
+          {% for rating in movie.ratings.all %}
+            <div class="rating">
+              <div class="score">{{ rating.rating }}</div>
+              <div class="source">{{ rating.platform }}</div>
+            </div>
+          {% endfor %}
       </div>
 
       <p class="description">
-        Когда Загадочник, садист и серийный убийца, 
-        начинает убивать ключевых политических деятелей 
-        Готэма, Бэтмен вынужден расследовать скрытую коррупцию
-         в городе и усомниться в причастности к этому своей семьи.
+          {{ movie.description }}
       </p>
 
       <ul class="info-list">
         <li>
           <span class="label">Сертификат</span>
-          <span class="certificate">16+</span>
+          <span class="certificate">{{ movie.certificate }}</span>
         </li>
         <li>
-          <span class="label">Время выполнения</span> <span class="value">02:56</span>
+          <span class="label">Продолжительность</span> <span class="value">{{ movie.runtime }}</span>
         </li>
         <li>
-          <span class="label">Выпуск</span> <span class="value">2022</span>
+          <span class="label">Выпуск</span> <span class="value">{{ movie.released }}</span>
         </li>
         <li>
           <span class="label">Жанр</span>
-          <span class="value">Боевик, Криминал, Драма</span>
+          <span class="value">{{ movie.genres_ }}</span>
         </li>
         <li>
           <span class="label">Директор</span>
-          <span class="value">Мэтт Ривз</span>
+          <span class="value">{{ movie.directors_ }}</span>
         </li>
         <li>
           <span class="label">В ролях</span>
-          <span class="value"
-            >Роберт Паттинсон, Зои Кравиц, Джеффри Райт, Колин Фаррелл, Пол Дано, Джон Туртурро, Энди Серкис, Питер Сарсгаард</span>
+          <span class="value">{{ movie.actors_ }}</span>
         </li>
       </ul>
       <a href="{% url 'movie_sessions' 1 %}"><button class="select-session-btn">Выбрать сеанс</button></a>

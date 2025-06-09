@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from home.models import MovieModel, SessionModel, CinemaModel
+from django.utils.translation import gettext_lazy as _
 
 
 def home(request):
@@ -26,14 +27,16 @@ def cinema_seats(request, pk: int):
     price_type = request.GET.get('type')
     match price_type:
         case "child":
+            type_name = _("Child")
             price = session.child
         case "student":
+            type_name = _("Student")
             price = session.student
         case _:
+            type_name = _("Adult")
             price = session.adult
     cinema = session.cinema
     rows = cinema.seats_row_count
     cols = cinema.seats_column_count
     occupied = session.tickets.values_list('seat_row', 'seat_column').order_by('seat_row', 'seat_column')
-    print(occupied)
-    return render(request, 'seats.html', context={'cinema': cinema, 'rows': rows, 'cols': cols, 'occupied': [list(i) for i in occupied], "session": session, "price": price})
+    return render(request, 'seats.html', context={'cinema': cinema, 'rows': rows, 'cols': cols, 'occupied': [list(i) for i in occupied], "session": session, "price": price, "type_name": type_name })

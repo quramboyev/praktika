@@ -149,7 +149,7 @@
     <header class="header">
       <a class="back-btn" href="{% url 'home' %}">
         <i class="bi bi-box-arrow-in-left"></i></a>
-      <h1 class="title">Бэтман</h1>
+      <h1 class="title">{{ movie.name }}</h1>
     </header>
 
     <div class="tabs">
@@ -166,7 +166,7 @@
     </div>
     <div class="sessions-container">
       <div class="sessions-header">
-        <div class="date">Апрель, 18</div>
+        <div class="date">Дата</div>
         <div class="sort-time">По времени ↑</div>
         <div class="toggle-cinema">
           <label class="switch">
@@ -199,7 +199,7 @@
                     <tr>
                         <td>
                           <div class="time">{{ session.time }}</div>
-                          <div class="lang">{{ session.options }}</div>
+                          <div class="lang">{{ session.options_ }}</div>
                         </td>
                         <td><a href="{% url 'seats' session.id %}?type=adult" class="seats_link">{{ session.adult }} ₽</a></td>
                         <td><a href="{% url 'seats' session.id %}?type=child" class="seats_link">{{ session.child }} ₽</a></td>

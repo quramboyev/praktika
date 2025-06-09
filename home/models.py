@@ -72,6 +72,27 @@ class MovieModel(TranslatableModel):
             return 0
         return res
 
+    @property
+    def genres_(self):
+        genres = self.genres.all()
+        if not genres:
+            return ""
+        return ', '.join([i.name for i in self.genres.all()])
+
+    @property
+    def directors_(self):
+        directors = self.directors.all()
+        if not directors:
+            return ''
+        return ", ".join(f"{i.name} {i.surname}" for i in directors)
+
+    @property
+    def actors_(self):
+        actors = self.actors.all()
+        if not actors:
+            return ''
+        return ", ".join(f"{i.name} {i.surname}" for i in actors)
+
     class Meta:
         db_table = 'movies'
         verbose_name = _('Movie')
@@ -114,7 +135,7 @@ class CinemaModel(TranslatableModel):
 
 
 class SessionModel(models.Model):
-    time = models.TimeField(verbose_name=_('Time'))
+    time = models.DateTimeField(verbose_name=_('Time'))
     options = models.JSONField(default=list, verbose_name=_('Options'))
     movie = models.ForeignKey(MovieModel, on_delete=models.CASCADE, related_name='sessions', verbose_name=_('Movie'))
     cinema = models.ForeignKey(CinemaModel, on_delete=models.CASCADE, verbose_name=_('Cinema'), related_name='sessions')

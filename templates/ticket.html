@@ -64,13 +64,12 @@
       src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BatmanTicket123"
       alt="QR Code"
     />
-    <p><strong>Бэтман</strong></p>
+    <p><strong>{{ movie.name }}</strong></p>
     <p>
-      <strong>Кинотеатр:</strong> Евразия кинотеатр 7<br />ул. Петрова, д.24, ТЦ
-      "Евразия"
+      <strong>Кинотеатр:</strong>{{ cinema.name }}<br />
+        {{ cinema.address }}
     </p>
-    <p><strong>Дата:</strong> 6 Апрель 2022, 14:40</p>
-    <p><strong>Зал:</strong> 6</p>
+    <p><strong>Дата:</strong>{{ session.time }}</p>
     <p><strong>Места:</strong> <span id="ticketSeats">—</span></p>
     <p><strong>Расходы:</strong> <span id="ticketCost">—</span></p>
     <button class="refund-btn">Возврат</button>
