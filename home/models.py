@@ -71,7 +71,7 @@ class MovieModel(TranslatableModel):
         res = self.ratings.all().aggregate(average=models.Avg('rating'))['average']
         if not res:
             return 0
-        return res
+        return round(res, 1)
 
     @property
     def genres_(self):
