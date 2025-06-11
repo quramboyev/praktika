@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <style>
   .navbar-custom {
     background-color: #1c1c2b;
@@ -72,7 +73,7 @@
         value="{{ q }}"
         aria-label="Search"
       />
-      <button class="btn btn-outline-success" type="submit">Поиск</button>
+      <button class="btn btn-outline-success" type="submit">{% trans "Search" %}</button>
     </form>
     <div class="d-flex align-items-center text-white navbar-text">
       <svg
@@ -92,11 +93,11 @@
       style="cursor: pointer"
     >
       <img class="lang-icon" src="{% static "main/images/russia.png" %}"
-      alt="Russian flag" /> РУ
+      alt="Russian flag" /> {% trans "РУ" %}
     </div>
     {% if not request.user.is_authenticated %}
     <button class="btn btn-login">
-      <a class="login_btn" href="{% url 'login' %}">Логин</a>
+      <a class="login_btn" href="{% url 'login' %}">{% trans "Логин" %}</a>
     </button>
     {% else %}
     <!-- Пользователь авторизован, показываем кнопку для открытия модалки -->
@@ -106,7 +107,7 @@
       data-bs-toggle="modal"
       data-bs-target="#profileModal"
     >
-      Открыть профиль
+      {% trans "Открыть профиль" %}
     </button>
     {% endif %}
   </div>

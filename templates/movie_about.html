@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 <style>
@@ -149,7 +150,7 @@
       <div class="tabs">
         <a
           href="{% url 'movie_about' pk=movie.id %}"
-          class="tab {% if request.path == '/movie_about/' %}active{% endif %}">О фильме</a>
+          class="tab {% if request.path == '/movie_about/' %}active{% endif %}">{% trans "About film" %}</a>
         <a
           href="{% url 'movie_sessions' pk=movie.id %}"
           class="tab {% if request.path == '/movie_sessions' %}active{% endif %}"
@@ -172,29 +173,29 @@
 
       <ul class="info-list">
         <li>
-          <span class="label">Сертификат</span>
+          <span class="label">{% trans "certificate" %}</span>
           <span class="certificate">{{ movie.certificate }}</span>
         </li>
         <li>
-          <span class="label">Продолжительность</span> <span class="value">{{ movie.runtime }}</span>
+          <span class="label">{% trans "runtime" %}</span> <span class="value">{{ movie.runtime }}</span>
         </li>
         <li>
-          <span class="label">Выпуск</span> <span class="value">{{ movie.released }}</span>
+          <span class="label">{% trans "Release" %}</span> <span class="value">{{ movie.released }}</span>
         </li>
         <li>
-          <span class="label">Жанр</span>
+          <span class="label">{% trans "Genre" %}</span>
           <span class="value">{{ movie.genres_ }}</span>
         </li>
         <li>
-          <span class="label">Директор</span>
+          <span class="label">{% trans "Director" %}</span>
           <span class="value">{{ movie.directors_ }}</span>
         </li>
         <li>
-          <span class="label">В ролях</span>
+          <span class="label">{% trans "Starring" %}</span>
           <span class="value">{{ movie.actors_ }}</span>
         </li>
       </ul>
-      <a href="{% url 'movie_sessions' 1 %}"><button class="select-session-btn">Выбрать сеанс</button></a>
+      <a href="{% url 'movie_sessions' 1 %}"><button class="select-session-btn">{% trans "Select session" %}</button></a>
     </div>
 </div>
 

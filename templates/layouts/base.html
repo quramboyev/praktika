@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,24 +11,21 @@
     {% endblock %}
 </head>
 <body style="background-color: #637394;">
-
     {% include 'layouts/navbar.html' %}
     <div>
         <div class="container">
             <div class="row">
-                    {% block content %}
-                    {% endblock %}
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
     </div>
     {% block footer %}
 
     {% endblock %}
-
     <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
     {% block extra_js %}
     {% endblock %}
-{% include "profile_modal.html" %}
-
+    {% include "profile_modal.html" %}
 </body>
 </html>

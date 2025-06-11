@@ -1,4 +1,7 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
 
 <style>
   .container {
@@ -218,14 +221,14 @@
 <!-- Модалка оплаты -->
 <div id="modalOverlay" class="modal hidden">
   <div class="modal-content">
-    <h2>Оплатить билеты</h2>
-    <p><strong>Бэтмен</strong></p>
-    <p><strong>Кинотеатр:</strong>{{ cinema.name }}</p>
-    <p><strong>Дата:</strong>{{ session.time }}</p>
-    <p><strong>Места:</strong> <span id="selectedSeatsDisplay">—</span></p>
+    <h2>{% trans "pay for tickets" %}</h2>
+    <p><strong>{{ session.movie.name }}</strong></p>
+    <p><strong>{% trans "Cinema" %}:</strong>{{ cinema.name }}</p>
+    <p><strong>{% trans "Date" %}:</strong>{{ session.time }}</p>
+    <p><strong>{% trans "Place" %}:</strong> <span id="selectedSeatsDisplay">—</span></p>
 
-    <span><strong>Тип билета:</strong> {{ type_name }}</span>
-    <p><strong>Общая:</strong> <span id="totalDisplay">0</span> ₽</p>
+    <span><strong>{% trans "Ticket type" %}:</strong> {{ type_name }}</span>
+    <p><strong>{% trans "Total" %}:</strong> <span id="totalDisplay">0</span> ₽</p>
     <input
       id="phoneInput"
       type="text"
@@ -234,7 +237,7 @@
     />
     <div style="display: flex; justify-content: space-between; gap: 10px">
       <button id="closeModal" class="btn-close"></button>
-      <button id="continueBtn" class="btn-continue">Продолжить</button>
+      <button id="continueBtn" class="btn-continue">{% trans "Continue" %}</button>
     </div>
   </div>
 </div>

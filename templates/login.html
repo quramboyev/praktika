@@ -1,4 +1,6 @@
-{% extends 'layouts/base.html' %} {% load crispy_forms_filters %} 
+{% extends 'layouts/base.html' %}
+{% load crispy_forms_filters %}
+{% load i18n %}
 {% block content %}
 <style>
   .card {
@@ -102,13 +104,13 @@
         class="text-muted"
         style="font-weight: 500; font-size: 0.9rem; margin-top: 4px"
       >
-        Access to purchased tickets
+        {% trans "Access to purchased tickets" %}
       </div>
     </div>
     <div class="card-body" style="background-color: #7a89a5">
       <form action="{% url 'login' %}" method="post">
         {% csrf_token %} {{ form.as_p }}
-        <button type="submit" class="btn btn-continue mt-3">Continue</button>
+        <button type="submit" class="btn btn-continue mt-3">{% trans "Continue" %}</button>
       </form>
     </div>
   </div>
@@ -124,7 +126,7 @@
       style="background-color: #0f172a; border-radius: 15px"
     >
       <div class="modal-header border-0">
-        <h5 class="modal-title text-white">Add card</h5>
+        <h5 class="modal-title text-white">{% trans "Add card" %}</h5>
         <button
           type="button"
           class="btn-close btn-close-white"
@@ -169,7 +171,7 @@
               required
             />
           </div>
-          <button type="submit" class="btn btn-continue">Add card</button>
+          <button type="submit" class="btn btn-continue">{% trans "Add card" %}</button>
         </form>
       </div>
     </div>

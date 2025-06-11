@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %} 
-{% load static %} 
+{% load static %}
+{% load i18n %}
 {% block content %}
 
 <style>
@@ -156,7 +157,7 @@
       <a
         href="{% url 'movie_about' movie.id %}"
         class="tab {% if request.path == '/movie_about/' %}active{% endif %}"
-        >О фильме</a
+        >{% trans "About film" %}</a
       >
       <a
         href="{% url 'movie_sessions' movie.id %}"
@@ -166,25 +167,25 @@
     </div>
     <div class="sessions-container">
       <div class="sessions-header">
-        <div class="date">Дата</div>
-        <div class="sort-time">По времени ↑</div>
+        <div class="date">{% trans "Date" %}</div>
+        <div class="sort-time">{% trans "By time ↑" %}</div>
         <div class="toggle-cinema">
           <label class="switch">
             <input type="checkbox" checked />
             <span class="slider"></span>
           </label>
-          <span>По кино</span>
+          <span>{% trans "By film" %}</span>
         </div>
       </div>
 
       <table class="sessions-table">
         <thead>
           <tr>
-            <th>Время</th>
-            <th>Взрослые</th>
-            <th>Дети</th>
-            <th>Студенты</th>
-            <th>VIP</th>
+            <th>{% trans "Time" %}</th>
+            <th>{% trans "Adult" %}</th>
+            <th>{% trans "Child" %}</th>
+            <th>{% trans "Student" %}</th>
+            <th>{% trans "VIP" %}</th>
           </tr>
         </thead>
         <tbody>

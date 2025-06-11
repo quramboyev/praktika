@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <style>
 
@@ -59,20 +60,20 @@
 <div id="ticketModal" class="modal hidden">
   <div class="modal-content">
     <span id="closeModal" class="close-btn">&times;</span>
-    <h2>Ваш билет</h2>
+    <h2>{% trans "Your ticket" %}</h2>
     <img
       src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BatmanTicket123"
       alt="QR Code"
     />
     <p><strong>{{ movie.name }}</strong></p>
     <p>
-      <strong>Кинотеатр:</strong>{{ cinema.name }}<br />
+      <strong>{% trans "Cinema" %}:</strong>{{ cinema.name }}<br />
         {{ cinema.address }}
     </p>
-    <p><strong>Дата:</strong>{{ session.time }}</p>
-    <p><strong>Места:</strong> <span id="ticketSeats">—</span></p>
-    <p><strong>Расходы:</strong> <span id="ticketCost">—</span></p>
-    <button class="refund-btn">Возврат</button>
-    <button class="send-btn">Отправить</button>
+    <p><strong>{% trans "Date" %}:</strong>{{ session.time }}</p>
+    <p><strong>{% trans "Place" %}</strong> <span id="ticketSeats">—</span></p>
+    <p><strong>{% trans "Payment" %}:</strong> <span id="ticketCost">—</span></p>
+    <button class="refund-btn">{% trans "Return" %}</button>
+    <button class="send-btn">{% trans "Send" %}</button>
   </div>
 </div>
